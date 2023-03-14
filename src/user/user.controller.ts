@@ -10,16 +10,14 @@ import { PureUserDto } from './dtos/pure-user.dto';
 
 @ApiTags('user')
 @Controller('user')
-@DecorateAll([])
+@DecorateAll([JWTAuth()])
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @JWTAuth()
   @Get('info')
   @ApiSwagger({
     apiOperation: {
-      summary: 'Should successful return user info from token',
-      description: 'in dynamo = getUserDetails',
+      summary: 'Should successful return user info from jwt token',
     },
     apiResponses: {
       [StatusCodes.OK]: {

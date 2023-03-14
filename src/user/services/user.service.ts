@@ -23,7 +23,7 @@ export class UserService {
     this.bcryptSaltRound = this.appConfigService.bcryptSalt;
   }
 
-  public async createUser(body: CreateUserDto): Promise<User> {
+  public async createUser(body: CreateUserDto): Promise<PureUserDto> {
     return this.manager.transaction(async (entityManager) => {
       const transactionalUserRepo = await entityManager.getRepository(User);
       const { email, password, ...rest } = body;

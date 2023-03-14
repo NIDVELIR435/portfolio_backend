@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfigService } from './config/app-config.service';
 import { UserModule } from './user/user.module';
+import { PortfolioModule } from './portfolio/portfolio.module';
 import * as Entities from './db/entities';
 import * as Migrations from './db/migrations';
 
@@ -32,6 +33,7 @@ import * as Migrations from './db/migrations';
     AppConfigModule,
     AuthModule,
     UserModule,
+    PortfolioModule,
   ],
   controllers: [AppController],
   providers: [AppService],
