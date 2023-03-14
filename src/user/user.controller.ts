@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, Req } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, Req } from '@nestjs/common';
 import { UserService } from './services/user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiSwagger, DecorateAll } from '../common/decorators';
@@ -28,5 +28,21 @@ export class UserController {
   @HttpCode(StatusCodes.OK)
   returnUserInfo(@Req() { user }: Request & { user: User }): PureUserDto {
     return user;
+  }
+
+  @Delete()
+  @ApiSwagger({
+    apiOperation: {
+      summary: 'Should successful remove user',
+    },
+    apiResponses: {
+      [StatusCodes.OK]: {
+        type: PureUserDto,
+      },
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  removeUser(@Req() { user }: Request & { user: User }): Promise<boolean> {
+    return this.userService.removeUser(user.id);
   }
 }
