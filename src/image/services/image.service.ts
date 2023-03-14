@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PortfolioIdParamDto } from '../../common/dtos/portfolio-id-param.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Image, Portfolio } from '../../db/entities';
+import { Image, Portfolio, User } from '../../db/entities';
 import { EntityManager, Repository } from 'typeorm';
 import { ImageIdParamDto } from '../../common/dtos/image-id-param.dto';
 import { CreateImageDto } from '../dtos/create-image.dto';
@@ -54,6 +59,40 @@ export class ImageService {
       const newImage: Partial<Image> = { id, description, url, portfolio };
 
       return transactionalImageRepository.save(newImage);
+    });
+  }
+
+  removeImage(user: User, param: ImageIdParamDto): Promise<boolean> {
+    const { imageId } = param;
+    const { id: userId } = user;
+
+    return this.manager.transaction(async (entityManager) => {
+      const transactionalImageRepo = await entityManager.getRepository(Image);
+
+      const existImage = await transactionalImageRepo
+        .createQueryBuilder('image')
+        .select('image.id')
+        .leftJoin('image.portfolio', 'portfolio')
+        .addSelect('portfolio.id')
+        .leftJoin('portfolio.owner', 'owner')
+        .addSelect('owner.id')
+        .where('image.id = :imageId', { imageId })
+        .getOne();
+
+      if (isNil(existImage))
+        throw new NotFoundException(`Cannot found image where id: ${imageId}`);
+
+      if (existImage.portfolio.owner.id !== userId)
+        throw new ForbiddenException(
+          `You can remove image only where you are owner.`,
+        );
+
+      return transactionalImageRepo
+        .delete({ id: imageId })
+        .then(() => true)
+        .catch((reason) => {
+          throw new ConflictException(reason);
+        });
     });
   }
 }

@@ -77,8 +77,8 @@ export class PortfolioController {
   @HttpCode(StatusCodes.OK)
   removePortfolio(
     @Req() { user }: Request & { user: User },
-    @Param() body: PortfolioIdParamDto,
+    @Param() param: PortfolioIdParamDto,
   ): Promise<boolean> {
-    return this.portfolioService.removePortfolio(user, body);
+    return this.portfolioService.removePortfolio(user, param);
   }
 }

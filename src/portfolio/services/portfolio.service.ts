@@ -53,8 +53,8 @@ export class PortfolioService {
     });
   }
 
-  removePortfolio(user: User, body: PortfolioIdParamDto): Promise<boolean> {
-    const { portfolioId } = body;
+  removePortfolio(user: User, param: PortfolioIdParamDto): Promise<boolean> {
+    const { portfolioId } = param;
     const { id: userId } = user;
 
     return this.manager.transaction(async (entityManager) => {

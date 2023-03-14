@@ -1,13 +1,22 @@
-import { Body, Controller, Get, HttpCode, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Req,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiSwagger, DecorateAll } from '../common/decorators';
 import { JWTAuth } from '../auth/decorators/auth.decorator';
 import { StatusCodes } from 'http-status-codes';
-import { Image } from '../db/entities';
+import { Image, User } from '../db/entities';
 import { PortfolioIdParamDto } from '../common/dtos/portfolio-id-param.dto';
 import { ImageService } from './services/image.service';
 import { ImageIdParamDto } from '../common/dtos/image-id-param.dto';
 import { CreateImageDto } from './dtos/create-image.dto';
+import { Request } from 'express';
 
 @ApiTags('image')
 @Controller('image')
@@ -62,5 +71,24 @@ export class ImageController {
   @HttpCode(StatusCodes.CREATED)
   uploadImage(@Body() body: CreateImageDto): Promise<Image> {
     return this.imageService.uploadImage(body);
+  }
+
+  @Delete(':imageId')
+  @ApiSwagger({
+    apiOperation: {
+      summary: 'Should successful remove image',
+    },
+    apiResponses: {
+      [StatusCodes.OK]: {
+        type: Boolean,
+      },
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  removePortfolio(
+    @Req() { user }: Request & { user: User },
+    @Param() param: ImageIdParamDto,
+  ): Promise<boolean> {
+    return this.imageService.removeImage(user, param);
   }
 }
