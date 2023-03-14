@@ -37,7 +37,7 @@ export class UserController {
     },
     apiResponses: {
       [StatusCodes.OK]: {
-        type: PureUserDto,
+        type: Boolean,
       },
     },
   })

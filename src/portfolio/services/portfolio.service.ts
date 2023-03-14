@@ -1,9 +1,16 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Portfolio, User } from '../../db/entities';
 import { EntityManager, Repository } from 'typeorm';
 import { CreatePortfolioDto } from '../dtos/create-portfolio.dto';
 import { isNil } from 'lodash';
+import { PortfolioIdParamDto } from '../../common/dtos/portfolio-id-param.dto';
 
 @Injectable()
 export class PortfolioService {
@@ -43,6 +50,43 @@ export class PortfolioService {
         );
 
       return transactionalPortfolioRepo.save({ ...body, owner: user });
+    });
+  }
+
+  removePortfolio(user: User, body: PortfolioIdParamDto): Promise<boolean> {
+    const { portfolioId } = body;
+    const { id: userId } = user;
+
+    return this.manager.transaction(async (entityManager) => {
+      const transactionalPortfolioRepo = await entityManager.getRepository(
+        Portfolio,
+      );
+
+      const existPortfolio = await transactionalPortfolioRepo.findOne({
+        select: {
+          id: true,
+          owner: { id: true },
+        },
+        relations: { owner: true },
+        where: { id: portfolioId },
+      });
+
+      if (isNil(existPortfolio))
+        throw new NotFoundException(
+          `Cannot found portfolio where id: ${portfolioId}`,
+        );
+
+      if (existPortfolio.owner.id !== userId)
+        throw new ForbiddenException(
+          `You can remove portfolio only where you are owner.`,
+        );
+
+      return transactionalPortfolioRepo
+        .delete({ id: portfolioId })
+        .then(() => true)
+        .catch((reason) => {
+          throw new ConflictException(reason);
+        });
     });
   }
 }

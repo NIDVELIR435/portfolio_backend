@@ -1,4 +1,13 @@
-import { Body, Controller, Get, HttpCode, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Post,
+  Req,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { JWTAuth } from '../auth/decorators/auth.decorator';
 import { ApiSwagger, DecorateAll } from '../common/decorators';
@@ -7,6 +16,8 @@ import { Request } from 'express';
 import { Portfolio, User } from '../db/entities';
 import { PortfolioService } from './services/portfolio.service';
 import { CreatePortfolioDto } from './dtos/create-portfolio.dto';
+import { PureUserDto } from '../user/dtos/pure-user.dto';
+import { PortfolioIdParamDto } from '../common/dtos/portfolio-id-param.dto';
 
 @ApiTags('portfolio')
 @Controller('portfolio')
@@ -50,5 +61,24 @@ export class PortfolioController {
     @Body() body: CreatePortfolioDto,
   ): Promise<Portfolio> {
     return this.portfolioService.createPortfolio(user, body);
+  }
+
+  @Delete(':portfolioId')
+  @ApiSwagger({
+    apiOperation: {
+      summary: 'Should successful remove portfolio',
+    },
+    apiResponses: {
+      [StatusCodes.OK]: {
+        type: Boolean,
+      },
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  removePortfolio(
+    @Req() { user }: Request & { user: User },
+    @Param() body: PortfolioIdParamDto,
+  ): Promise<boolean> {
+    return this.portfolioService.removePortfolio(user, body);
   }
 }
