@@ -46,14 +46,12 @@ export class ImageService {
           })
         : null;
 
-      if (!isNil(portfolioId) && isNil(portfolio))
+      if (isNil(portfolio))
         throw new NotFoundException(
           `Cannot found portfolio where id: ${portfolioId}`,
         );
 
-      const newImage: Partial<Image> = { id, description, url };
-
-      if (!isNil(portfolioId)) newImage.portfolio = portfolio;
+      const newImage: Partial<Image> = { id, description, url, portfolio };
 
       return transactionalImageRepository.save(newImage);
     });

@@ -11,6 +11,5 @@ export class CreateImageDto extends PickType(Image, [
   @ApiProperty({ type: Number })
   @Type(() => Number)
   @IsInt()
-  @IsOptional()
-  portfolioId?: number;
+  portfolioId: number;
 }
