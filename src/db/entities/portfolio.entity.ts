@@ -1,6 +1,8 @@
 import { IntTimestampEntity } from './utils/int-timestamp.entity';
 import { Column, Entity, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { Image, User } from './';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 
 @Entity('portfolio')
 export class Portfolio extends IntTimestampEntity {
@@ -10,6 +12,8 @@ export class Portfolio extends IntTimestampEntity {
     length: 1000,
     nullable: false,
   })
+  @ApiProperty({ type: String })
+  @IsString()
   name: string;
 
   @Column({
@@ -17,6 +21,9 @@ export class Portfolio extends IntTimestampEntity {
     type: 'text',
     nullable: true,
   })
+  @ApiProperty({ type: String })
+  @IsString()
+  @IsOptional()
   description?: string;
 
   @ManyToOne(() => User, ({ portfolios }) => portfolios)

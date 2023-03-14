@@ -1,6 +1,8 @@
 import { IntTimestampEntity } from './utils/int-timestamp.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Comment, Portfolio } from './';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsString } from 'class-validator';
 
 @Entity('user')
 export class User extends IntTimestampEntity {
@@ -9,6 +11,8 @@ export class User extends IntTimestampEntity {
     type: 'text',
     nullable: false,
   })
+  @ApiProperty({ type: String })
+  @IsString()
   firstName: string;
 
   @Column({
@@ -16,6 +20,8 @@ export class User extends IntTimestampEntity {
     type: 'text',
     nullable: false,
   })
+  @ApiProperty({ type: String })
+  @IsString()
   lastName: string;
 
   @Column({
@@ -24,6 +30,8 @@ export class User extends IntTimestampEntity {
     length: '200',
     nullable: false,
   })
+  @ApiProperty({ type: String, example: 'example@gmail.com' })
+  @IsEmail()
   email: string;
 
   @Column({
@@ -32,11 +40,15 @@ export class User extends IntTimestampEntity {
     length: '2000',
     nullable: false,
   })
-  passport: string;
+  @ApiProperty({ type: String })
+  @IsString()
+  password: string;
 
+  @ApiProperty({ type: Portfolio, isArray: true })
   @OneToMany(() => Portfolio, ({ owner }) => owner)
   portfolios: Portfolio[];
 
+  @ApiProperty({ type: Comment, isArray: true })
   @OneToMany(() => Comment, ({ commenter }) => commenter)
   comments: Comment[];
 }

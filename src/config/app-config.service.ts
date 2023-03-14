@@ -12,6 +12,9 @@ export class AppConfigService {
   public readonly dbName: string;
   public readonly dbSynchronize: boolean;
   public readonly dbLogging: boolean;
+  public readonly bcryptSalt: number;
+  public readonly jwtSecret: string;
+  public readonly jwtExpiresIn: string;
 
   constructor(private configService: ConfigService) {
     this.appPort = Number(this.get('APP_PORT'));
@@ -23,6 +26,9 @@ export class AppConfigService {
     this.dbName = this.get('DB_NAME');
     this.dbSynchronize = this.get('DB_SYNCHRONIZE') === 'true';
     this.dbLogging = this.get('DB_LOGGING') === 'true';
+    this.bcryptSalt = Number(this.get('BCRYPT_SALT'));
+    this.jwtSecret = this.get('JWT_SECRET');
+    this.jwtExpiresIn = this.get('JWT_EXPIRES_IN');
   }
 
   public get<T = string>(name: string): T {
