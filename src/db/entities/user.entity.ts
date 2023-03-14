@@ -1,6 +1,6 @@
 import { IntTimestampEntity } from './utils/int-timestamp.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { Portfolio } from './portfolio.entity';
+import { Comment, Portfolio } from './';
 
 @Entity('user')
 export class User extends IntTimestampEntity {
@@ -27,13 +27,16 @@ export class User extends IntTimestampEntity {
   email: string;
 
   @Column({
-    name: 'passport',
+    name: 'password',
     type: 'varchar',
-    length: '200',
+    length: '2000',
     nullable: false,
   })
   passport: string;
 
   @OneToMany(() => Portfolio, ({ owner }) => owner)
   portfolios: Portfolio[];
+
+  @OneToMany(() => Comment, ({ commenter }) => commenter)
+  comments: Comment[];
 }

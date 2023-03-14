@@ -5,7 +5,9 @@ import { AppConfigModule } from './config/appConfigModule';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppConfigService } from './config/app-config.service';
+import { UserModule } from './user/user.module';
 import * as Entities from './db/entities';
+import * as Migrations from './db/migrations';
 
 @Module({
   imports: [
@@ -22,13 +24,14 @@ import * as Entities from './db/entities';
         password: appConfigService.dbPassword,
         database: appConfigService.dbName,
         entities: Object.values(Entities),
-        migrations: ['./db/migrations'],
+        migrations: Object.values(Migrations),
         synchronize: appConfigService.dbSynchronize,
         logging: appConfigService.dbLogging,
       }),
     }),
     AppConfigModule,
     AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

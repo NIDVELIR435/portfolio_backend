@@ -5,7 +5,8 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 @Injectable()
 export class AuthService {
   create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+
+    return createAuthDto;
   }
 
   findAll() {
@@ -17,7 +18,8 @@ export class AuthService {
   }
 
   update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
+    return {id, updateAuthDto
+  };
   }
 
   remove(id: number) {
