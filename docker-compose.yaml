@@ -9,6 +9,13 @@ services:
       - "3000:3000"
     depends_on:
       - db
+#    rewrite dockerfile build CMD to start with watch mode
+    command: yarn start
+    volumes:
+#      will cache node_modules
+      - /app/node_modules
+#      check host changes
+      - ./src:/app/src
   db:
     image: postgres:12-alpine
     command: postgres -c 'max_connections=200'

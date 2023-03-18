@@ -1,14 +1,14 @@
 FROM node:19-alpine
 
 # Create app directory
-WORKDIR usr/src/app
+WORKDIR /app
 
 #copy package and packege-lock
 COPY package*.json ./
+COPY yarn.lock ./
 
 #install yarn
 RUN npm install yarn -G
-RUN yarn add pg
 
 #install node_modules
 RUN yarn
@@ -21,4 +21,4 @@ RUN yarn build
 
 EXPOSE 8080
 # start the server using the production build
-CMD ["node", "dist/main"]
+CMD ["yarn start:prod"]

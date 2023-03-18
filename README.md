@@ -1,17 +1,19 @@
 ## Installation
-
 ```bash
+# install all dependencies in your host  
 $ yarn;
-$ docker compose up -d;
 ```
 
 ## Running the app
 ```bash
-# start postgres
-$ docker start cmc-backend_db_1;
+# will configure and start container in watch mode
+$ yarn docker:start;
+```
 
-# development
-$ yarn start
+## stop the app
+```bash
+# will stop related containers
+$ yarn docker:stop;
 ```
 
 ## Swagger
