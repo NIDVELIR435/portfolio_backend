@@ -1,7 +1,7 @@
 {
   "name": "portfolio_backend",
   "version": "1.0.0",
-  "description": "Application for portfolios.",
+  "description": "Backend application for portfolios.",
   "author": "Yarosalv Mudryi",
   "private": true,
   "license": "UNLICENSED",
