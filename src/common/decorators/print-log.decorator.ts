@@ -13,24 +13,22 @@ type LogConfig = {
  */
 export const PrintLog =
   (logConfig?: LogConfig): MethodDecorator =>
-    (
-      target: Object | Function,
-      propertyKey: string | symbol,
-      descriptor: PropertyDescriptor
-    ) => {
-      const excludeArg = logConfig?.excludeArg ?? false;
-      // @ts-expect-error
-      const className = target.name;
-      const originalMethod = descriptor.value;
-      descriptor.value = new Proxy(originalMethod, {
-        apply: (target, thisArg, args) => {
-          Logger.debug(
-            excludeArg
-              ? 'Hide args.'
-              : `Call with args: ${toJSON(args)}`,
-            `${className}#${String(propertyKey)}`
-          );
-          return Reflect.apply(target, thisArg, args);
-        },
-      });
-    };
+  (
+    target: Object | Function,
+    propertyKey: string | symbol,
+    descriptor: PropertyDescriptor,
+  ) => {
+    const excludeArg = logConfig?.excludeArg ?? false;
+    // @ts-expect-error
+    const className = target.name;
+    const originalMethod = descriptor.value;
+    descriptor.value = new Proxy(originalMethod, {
+      apply: (target, thisArg, args) => {
+        Logger.debug(
+          excludeArg ? 'Hide args.' : `Call with args: ${toJSON(args)}`,
+          `${className}#${String(propertyKey)}`,
+        );
+        return Reflect.apply(target, thisArg, args);
+      },
+    });
+  };

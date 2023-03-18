@@ -7,6 +7,8 @@ services:
       context: .
     ports:
       - "3000:3000"
+#     debug port
+      - "9229:9229"
     depends_on:
       - db
 #    rewrite dockerfile build CMD to start with watch mode

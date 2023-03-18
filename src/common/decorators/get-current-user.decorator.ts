@@ -1,7 +1,4 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-} from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 //Will works when "passport" will be done
 export const GetCurrentUser = createParamDecorator(
@@ -9,5 +6,5 @@ export const GetCurrentUser = createParamDecorator(
     const request = ctx.switchToHttp().getRequest();
 
     return request.user;
-  }
+  },
 );

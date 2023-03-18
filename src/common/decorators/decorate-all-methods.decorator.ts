@@ -20,35 +20,29 @@ export const DecorateAll =
       deep?: boolean;
       exclude?: string[];
       excludePrefix?: string;
-    } = {}
+    } = {},
   ): ClassDecorator =>
   (target) => {
-    let descriptors = Object.getOwnPropertyDescriptors(
-      target.prototype
-    );
+    let descriptors = Object.getOwnPropertyDescriptors(target.prototype);
     if (options.deep) {
       let base = Object.getPrototypeOf(target);
       while (base.prototype) {
         const baseDescriptors = Object.getOwnPropertyDescriptors(
-          base.prototype
+          base.prototype,
         );
         descriptors = { ...baseDescriptors, ...descriptors };
         base = Object.getPrototypeOf(base);
       }
     }
 
-    for (const [propName, descriptor] of Object.entries(
-      descriptors
-    )) {
+    for (const [propName, descriptor] of Object.entries(descriptors)) {
       const isMethod =
         isFunction(descriptor.value) && propName !== 'constructor';
       if (options.exclude?.includes(propName)) continue;
       if (propName.startsWith(options.excludePrefix!)) continue;
       if (!isMethod) continue;
       const originalMethod = descriptor.value;
-      decoratorArray.forEach((value) =>
-        value(target, propName, descriptor)
-      );
+      decoratorArray.forEach((value) => value(target, propName, descriptor));
       if (originalMethod != descriptor.value) {
         copyMetadata(originalMethod, descriptor.value);
       }
