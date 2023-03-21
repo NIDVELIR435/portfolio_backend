@@ -48,7 +48,7 @@ export class AuthController {
       },
     },
   })
-  @HttpCode(StatusCodes.CREATED)
+  @HttpCode(StatusCodes.OK)
   @UseGuards(LocalAuthGuard)
   signIn(
     @Req() req: Request & { user: User },

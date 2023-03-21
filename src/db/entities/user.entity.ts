@@ -2,7 +2,8 @@ import { IntTimestampEntity } from './utils/int-timestamp.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Comment, Portfolio } from './';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { UiTheme } from './enums/ui-theme.enum';
 
 @Entity('user')
 export class User extends IntTimestampEntity {
@@ -43,6 +44,17 @@ export class User extends IntTimestampEntity {
   @ApiProperty({ type: String })
   @IsString()
   password: string;
+
+  @Column({
+    name: 'ui_theme',
+    type: 'enum',
+    enum: Object.values(UiTheme),
+    default: UiTheme.light,
+  })
+  @ApiProperty({ enum: UiTheme })
+  @IsEnum(UiTheme)
+  @IsOptional()
+  uiTheme: UiTheme;
 
   @ApiProperty({ type: Portfolio, isArray: true })
   @OneToMany(() => Portfolio, ({ owner }) => owner)
