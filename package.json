@@ -15,7 +15,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "docker:start": "docker compose up -d; yarn migration:run; docker logs portfolio_backend-backend-1 -f",
+    "docker:start": "yarn; docker compose up -d; yarn migration:run; docker logs portfolio_backend-backend-1 -f",
     "docker:stop": "docker compose stop",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
