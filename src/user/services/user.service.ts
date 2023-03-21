@@ -12,6 +12,7 @@ import { SignInDto } from '../../auth/dto/sign-in.dto';
 import { AppConfigService } from '../../config/app-config.service';
 import { hash } from 'bcrypt';
 import { PureUserDto } from '../dtos/pure-user.dto';
+import { UpdateUserUiThemeBodyDto } from '../dtos/update-user-ui-theme.body.dto';
 
 @Injectable()
 export class UserService {
@@ -60,6 +61,15 @@ export class UserService {
 
   public async findOneById(id: number): Promise<PureUserDto | null> {
     return await this.usersRepository.findOne({ where: { id } });
+  }
+
+  updateUserUiTheme(
+    userId: number,
+    body: UpdateUserUiThemeBodyDto,
+  ): Promise<boolean> {
+    return this.usersRepository
+      .update({ id: userId }, { uiTheme: body.uiTheme })
+      .then(() => true);
   }
 
   public async removeUser(id: number): Promise<boolean> {
