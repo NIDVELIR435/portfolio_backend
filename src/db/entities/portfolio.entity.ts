@@ -24,7 +24,7 @@ export class Portfolio extends IntTimestampEntity {
   @ApiProperty({ type: String })
   @IsString()
   @IsOptional()
-  description?: string;
+  description?: string | null;
 
   @ManyToOne(() => User, ({ portfolios }) => portfolios)
   @JoinColumn({

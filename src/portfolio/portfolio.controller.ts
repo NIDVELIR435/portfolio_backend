@@ -55,7 +55,7 @@ export class PortfolioController {
       },
     },
   })
-  @HttpCode(StatusCodes.OK)
+  @HttpCode(StatusCodes.CREATED)
   createPortfolio(
     @Req() { user }: Request & { user: User },
     @Body() body: CreatePortfolioDto,
