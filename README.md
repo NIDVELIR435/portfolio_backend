@@ -6,7 +6,9 @@ $ yarn;
 
 ## Running the app
 ```bash
-# will configure and start container in watch mode
+# rename create env or rename env.example to .env
+$ mv .env.example .env
+# will configure and start container in watch mode 
 $ yarn docker:start;
 ```
 
