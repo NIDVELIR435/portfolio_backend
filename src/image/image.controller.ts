@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Post,
   Req,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -57,7 +58,7 @@ export class ImageController {
     return this.imageService.findById(param);
   }
 
-  @Get('upload')
+  @Post('upload')
   @ApiSwagger({
     apiOperation: {
       summary: 'Should successful return upload new image',

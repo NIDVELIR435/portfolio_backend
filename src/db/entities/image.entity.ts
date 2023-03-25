@@ -8,9 +8,13 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { Portfolio, Comment } from './';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
 
 @Entity('image')
 export class Image extends IntTimestampEntity {
+  @ApiProperty({ type: String })
+  @IsString()
   @Column({
     name: 'url',
     type: 'text',
@@ -23,6 +27,8 @@ export class Image extends IntTimestampEntity {
     type: 'text',
     nullable: true,
   })
+  @ApiProperty({ type: String })
+  @IsString()
   description: string;
 
   @ManyToOne(() => Portfolio, ({ images }) => images)

@@ -16,7 +16,6 @@ import { Request } from 'express';
 import { Portfolio, User } from '../db/entities';
 import { PortfolioService } from './services/portfolio.service';
 import { CreatePortfolioDto } from './dtos/create-portfolio.dto';
-import { PureUserDto } from '../user/dtos/pure-user.dto';
 import { PortfolioIdParamDto } from '../common/dtos/portfolio-id-param.dto';
 
 @ApiTags('portfolio')
@@ -24,6 +23,7 @@ import { PortfolioIdParamDto } from '../common/dtos/portfolio-id-param.dto';
 @DecorateAll([JWTAuth()])
 export class PortfolioController {
   constructor(private portfolioService: PortfolioService) {}
+
   @Get('all')
   @ApiSwagger({
     apiOperation: {
@@ -41,6 +41,25 @@ export class PortfolioController {
     @Req() { user }: Request & { user: User },
   ): Promise<Portfolio[]> {
     return this.portfolioService.findAll(user.id);
+  }
+
+  @Get(':portfolioId')
+  @ApiSwagger({
+    apiOperation: {
+      summary: 'Should successful return one user portfolio',
+    },
+    apiResponses: {
+      [StatusCodes.OK]: {
+        type: Portfolio,
+      },
+    },
+  })
+  @HttpCode(StatusCodes.OK)
+  getOnePortfolio(
+    @Req() { user }: Request & { user: User },
+    @Param() param: PortfolioIdParamDto,
+  ): Promise<Portfolio> {
+    return this.portfolioService.findOne(user.id, param);
   }
 
   @Post('create')

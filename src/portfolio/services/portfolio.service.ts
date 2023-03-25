@@ -22,6 +22,15 @@ export class PortfolioService {
     this.manager = this.portfolioRepository.manager;
   }
 
+  findOne(
+    userId: number,
+    { portfolioId }: PortfolioIdParamDto,
+  ): Promise<Portfolio> {
+    return this.portfolioRepository.findOne({
+      where: { owner: { id: userId }, id: portfolioId },
+    });
+  }
+
   findAll(userId: number): Promise<Portfolio[]> {
     return this.portfolioRepository.find({ where: { owner: { id: userId } } });
   }

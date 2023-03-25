@@ -37,7 +37,7 @@ export class ImageService {
   }
 
   public uploadImage(body: CreateImageDto): Promise<Image> {
-    const { portfolioId, id, description, url } = body;
+    const { portfolioId, description, url } = body;
 
     return this.manager.transaction(async (entityManager) => {
       const transactionalImageRepository = entityManager.getRepository(Image);
@@ -56,7 +56,7 @@ export class ImageService {
           `Cannot found portfolio where id: ${portfolioId}`,
         );
 
-      const newImage: Partial<Image> = { id, description, url, portfolio };
+      const newImage: Partial<Image> = { description, url, portfolio };
 
       return transactionalImageRepository.save(newImage);
     });

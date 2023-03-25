@@ -3,11 +3,7 @@ import { Image } from '../../db/entities';
 import { Type } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
 
-export class CreateImageDto extends PickType(Image, [
-  'id',
-  'url',
-  'description',
-]) {
+export class CreateImageDto extends PickType(Image, ['url', 'description']) {
   @ApiProperty({ type: Number })
   @Type(() => Number)
   @IsInt()
