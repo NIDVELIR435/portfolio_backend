@@ -58,10 +58,10 @@ export class AuthController {
   })
   @HttpCode(StatusCodes.OK)
   signIn(
-    @Req() req: Request & { user: User },
+    @Req() { user }: Request & { user: User },
     @Body() _body: SignInBodyDto,
   ): Promise<AuthTokenDto> {
-    return this.authService.login(req.user);
+    return this.authService.login(user);
   }
 
   @Post('refresh-token')
