@@ -21,10 +21,10 @@ export class UserService {
 
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private userRepository: Repository<User>,
     private readonly appConfigService: AppConfigService,
   ) {
-    this.manager = this.usersRepository.manager;
+    this.manager = this.userRepository.manager;
     this.bcryptSaltRound = this.appConfigService.bcryptSalt;
   }
 
@@ -52,22 +52,22 @@ export class UserService {
   }
 
   signIn({ email }: SignInDto) {
-    return this.usersRepository.findOne({ where: { email } });
+    return this.userRepository.findOne({ where: { email } });
   }
 
   public async findOneByEmail(email: string): Promise<PureUserDto | null> {
-    return await this.usersRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   public async findOneById(id: number): Promise<PureUserDto | null> {
-    return await this.usersRepository.findOne({ where: { id } });
+    return await this.userRepository.findOne({ where: { id } });
   }
 
   updateUserUiTheme(
     userId: number,
     body: UpdateUserUiThemeBodyDto,
   ): Promise<boolean> {
-    return this.usersRepository
+    return this.userRepository
       .update({ id: userId }, { uiTheme: body.uiTheme })
       .then(() => true);
   }

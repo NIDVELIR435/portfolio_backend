@@ -5,7 +5,6 @@ import { StrategyName } from '../constants/strategyName';
 import { AppConfigService } from '../../config/app-config.service';
 import { compare } from 'bcrypt';
 import { UserService } from '../../user/services/user.service';
-import { User } from '../../db/entities';
 import { PureUserDto } from '../../user/dtos/pure-user.dto';
 @Injectable()
 export class LocalStrategy extends PassportStrategy(

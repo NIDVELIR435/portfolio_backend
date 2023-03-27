@@ -16,6 +16,8 @@ export class AppConfigService {
   public readonly bcryptSalt: number;
   public readonly jwtSecret: string;
   public readonly jwtExpiresIn: string;
+  public readonly jwtRefreshSecret: string;
+  public readonly jwtRefreshExpiresIn: string;
   public readonly backendName: string;
   public readonly telegramToken: string;
 
@@ -33,6 +35,8 @@ export class AppConfigService {
     this.bcryptSalt = Number(this.get('BCRYPT_SALT'));
     this.jwtSecret = this.get('JWT_SECRET');
     this.jwtExpiresIn = this.get('JWT_EXPIRES_IN');
+    this.jwtRefreshSecret = this.get('JWT_REFRESH_SECRET');
+    this.jwtRefreshExpiresIn = this.get('JWT_REFRESH_EXPIRES_IN');
     this.backendName = this.get('BACKEND_NAME');
     this.telegramToken = this.get('TELEGRAM_TOKEN');
   }

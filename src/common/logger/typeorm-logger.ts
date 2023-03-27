@@ -9,7 +9,24 @@ export class TypeormCustomLogger implements TypeOrmLogger {
     blue: '\x1b[34m',
     grey: '\x1b[37m',
     yellow: '\x1b[33;20m',
+    red: '\x1b[31m',
+    magenta: '\x1b[35m',
+    cyan: '\x1b[36m',
   };
+  private readonly transactionKeywords = [
+    'START',
+    'TRANSACTION',
+    'COMMIT',
+    'ROLLBACK',
+    'SERIALIZABLE',
+    'ISOLATION',
+    'READ',
+    'COMMITTED',
+    'UNCOMMITTED',
+    'REPEATABLE',
+    'LEVEL',
+    'SERIALIZABLE',
+  ];
   private readonly keywords = [
     'UPDATE ',
     ' SET ',
@@ -130,13 +147,30 @@ export class TypeormCustomLogger implements TypeOrmLogger {
 
     return noColor
       ? `${query}${coloredParams}`
-      : `${this.colorCode.grey}${this.keywords.reduce(
-          (acc, keyword) =>
-            acc.replaceAll(
-              keyword,
-              `${this.colorCode.blue}${keyword}${this.colorCode.grey}`,
-            ),
-          query,
+      : `${this.colorCode.grey}${this.addBlueColor(
+          this.addRedColor(query),
         )}${coloredParams}`;
+  }
+
+  private addBlueColor(query: string): string {
+    return this.keywords.reduce(
+      (acc, keyword) =>
+        acc.replaceAll(
+          keyword,
+          `${this.colorCode.blue}${keyword}${this.colorCode.grey}`,
+        ),
+      query,
+    );
+  }
+
+  private addRedColor(query: string): string {
+    return this.transactionKeywords.reduce(
+      (acc, keyword) =>
+        acc.replaceAll(
+          keyword,
+          `${this.colorCode.cyan}${keyword}${this.colorCode.grey}`,
+        ),
+      query,
+    );
   }
 }
