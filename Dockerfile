@@ -3,10 +3,8 @@ FROM node:19-alpine
 # Create app directory
 WORKDIR /app
 
-#copy package and packege-lock
-COPY package*.json ./
-COPY yarn.lock ./
-COPY .env ./
+#copy packages and env
+COPY package*.json yarn.lock .env ./
 
 #install yarn
 RUN npm install yarn -G

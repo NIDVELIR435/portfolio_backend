@@ -16,8 +16,6 @@ services:
     env_file:
       - .env
     volumes:
-#      will cache node_modules
-      - /app/node_modules
 #      check host changes
       - ./src:/app/src
   db:
