@@ -64,7 +64,7 @@ export class AuthController {
     return this.authService.login(user);
   }
 
-  @Post('refresh-token')
+  @Get('refresh-token')
   @JWTRefreshAuth()
   @ApiSwagger({
     apiOperation: {
