@@ -54,7 +54,7 @@ export class PortfolioService {
         .getOne();
 
       if (!isNil(existPortfolio))
-        throw new BadRequestException(
+        throw new ConflictException(
           `Portfolio with name: ${name} already exist`,
         );
 
