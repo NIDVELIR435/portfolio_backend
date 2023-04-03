@@ -22,6 +22,8 @@ jobs:
       - name: Build application
         run: |
           ls
+          cd ../
+          yarn
           yarn run build
 
       - name: Deploy application
