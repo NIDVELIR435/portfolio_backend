@@ -30,8 +30,11 @@ jobs:
           DOCKER_PASSWORD=$(aws ecr get-login-password)
           docker login -u AWS -p $DOCKER_PASSWORD https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
+      - name: Build docker image
+        run: docker build -t portfolio_backend .
+
       - name: Push Docker image to ECR
         run: |
-          docker build -t portfolio_backend .
+          aws ecr list-images --repository-name portfolio_backend --profile own
           docker tag portfolio_backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
           DOCKER_CLIENT_TIMEOUT=120s docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
