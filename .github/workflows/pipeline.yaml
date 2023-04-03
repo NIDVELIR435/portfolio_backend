@@ -24,6 +24,7 @@ jobs:
           ls -l
           cd ../
           ls -l
+          ls -l
           yarn
           
           yarn run build
