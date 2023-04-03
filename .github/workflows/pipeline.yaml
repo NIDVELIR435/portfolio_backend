@@ -35,6 +35,6 @@ jobs:
 
       - name: Push Docker image to ECR
         run: |
-          aws ecr list-images --repository-name portfolio_backend --profile own
+          aws ecr list-images --repository-name portfolio_backend
           docker tag portfolio_backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
           DOCKER_CLIENT_TIMEOUT=120s docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
