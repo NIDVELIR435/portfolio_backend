@@ -11,10 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          node-version: 19.0.0
 
-      - name: Install dependencies
+      - name: Install main dependencies
         run: |
           sudo apt-get update
           sudo npm install -g yarn
