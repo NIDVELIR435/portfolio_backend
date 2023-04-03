@@ -4,7 +4,7 @@ FROM node:19-alpine
 WORKDIR /app
 
 #copy packages and env
-COPY package*.json yarn.lock .env ./
+COPY package.json yarn.lock .env ./
 
 #install yarn
 RUN npm install yarn -G
