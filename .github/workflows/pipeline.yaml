@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
         with:
           node-version: 19.0.0
 
@@ -21,13 +21,7 @@ jobs:
 
       - name: Build application
         run: |
-          ls -l
-          cd ../
-          ls -l
-          cd ../
-          ls -l
-          yarn
-          
+          yarn          
           yarn run build
 
       - name: Deploy application
