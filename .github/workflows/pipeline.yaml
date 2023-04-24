@@ -24,7 +24,7 @@ jobs:
 
       - name: Execute tests
         run: |
-          jest
+          yarn run test
 
       - name: Login to ECR
         run: |
