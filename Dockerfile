@@ -18,6 +18,5 @@ COPY . .
 #create build
 RUN yarn build
 
-EXPOSE 8080
 # start the server using the production build
-CMD ["yarn start:prod"]
+CMD ["/bin/sh", "-c", "yarn start:prod"]
