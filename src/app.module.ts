@@ -18,22 +18,32 @@ import { TypeormCustomLogger } from './common/logger/typeorm-logger';
     TypeOrmModule.forRootAsync({
       imports: [AppConfigModule],
       inject: [AppConfigService],
-      useFactory: async (appConfigService: AppConfigService) => ({
-        type: 'postgres',
-        retryAttempts: 20,
-        retryDelay: 3000,
-        host: appConfigService.postgresContainerName,
-        port: appConfigService.postgresPort,
-        username: appConfigService.postgresUser,
-        password: appConfigService.postgresPassword,
-        database: appConfigService.postgresdb,
-        entities: Object.values(Entities),
-        migrations: Object.values(Migrations),
-        synchronize: appConfigService.postgresSynchronize,
-        logging: appConfigService.postgresLogging,
-        // adds all queries and errors to logger, which will catch and send to particular telegram channel
-        logger: new TypeormCustomLogger(appConfigService.postgresLogging),
-      }),
+      useFactory: async (appConfigService: AppConfigService) => {
+        console.log({
+          place: 'in module',
+          host: appConfigService.postgresContainerName,
+          port: appConfigService.postgresPort,
+          username: appConfigService.postgresUser,
+          password: appConfigService.postgresPassword,
+          database: appConfigService.postgresdb,
+        });
+        return {
+          type: 'postgres',
+          retryAttempts: 3,
+          retryDelay: 3000,
+          host: appConfigService.postgresContainerName,
+          port: appConfigService.postgresPort,
+          username: appConfigService.postgresUser,
+          password: appConfigService.postgresPassword,
+          database: appConfigService.postgresdb,
+          entities: Object.values(Entities),
+          migrations: Object.values(Migrations),
+          synchronize: appConfigService.postgresSynchronize,
+          logging: appConfigService.postgresLogging,
+          // adds all queries and errors to logger, which will catch and send to particular telegram channel
+          logger: new TypeormCustomLogger(appConfigService.postgresLogging),
+        };
+      },
     }),
     AppConfigModule,
     AuthModule,

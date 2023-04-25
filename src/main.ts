@@ -8,10 +8,17 @@ import { refreshTokenCookieName } from './auth/constants/refresh_token';
 import { StrategyName } from './auth/constants/strategyName';
 import * as cookieParser from 'cookie-parser';
 
-console.log(process.env.POSTGRES_PASSWORD);
-console.log(process.env.POSTGRES_USER);
-console.log(process.env.POSTGRES_EXTERNAL_HOST);
 console.log(`Command entered: ${process.argv.join(' ')}`);
+console.log({
+  place: 'in module',
+  POSTGRES_CONTAINER_NAME: process.env.POSTGRES_CONTAINER_NAME,
+  POSTGRES_EXTERNAL_HOST: process.env.POSTGRES_EXTERNAL_HOST,
+  POSTGRES_PORT: process.env.POSTGRES_PORT,
+  POSTGRES_USER: process.env.POSTGRES_USER,
+  POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
+  POSTGRES_DB: process.env.POSTGRES_DB,
+  POSTGRES_SYNCHRONIZE: process.env.POSTGRES_SYNCHRONIZE,
+});
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
