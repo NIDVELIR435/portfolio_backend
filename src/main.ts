@@ -11,6 +11,7 @@ import * as cookieParser from 'cookie-parser';
 console.log(process.env.POSTGRES_PASSWORD);
 console.log(process.env.POSTGRES_USER);
 console.log(process.env.POSTGRES_EXTERNAL_HOST);
+console.log(`Command entered: ${process.argv.join(' ')}`);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

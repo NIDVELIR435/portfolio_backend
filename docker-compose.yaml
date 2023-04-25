@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
 #    rewrite dockerfile build CMD to start with watch mode
-    command: yarn start
+    command: node dist/main.js
     env_file:
       - .env
     volumes:
