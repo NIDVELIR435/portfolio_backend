@@ -7,7 +7,10 @@ import { AppConfigService } from './config/app-config.service';
 import { refreshTokenCookieName } from './auth/constants/refresh_token';
 import { StrategyName } from './auth/constants/strategyName';
 import * as cookieParser from 'cookie-parser';
-import * as process from 'process';
+
+console.log(process.env.POSTGRES_PASSWORD);
+console.log(process.env.POSTGRES_USER);
+console.log(process.env.POSTGRES_EXTERNAL_HOST);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -43,7 +46,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  console.log(process.env);
   await app.listen(configService.appPort);
 }
 bootstrap();
