@@ -30,8 +30,9 @@ export class AppConfigService {
     this.postgresUser = this.get('POSTGRES_USER');
     this.postgresPassword = this.get('POSTGRES_PASSWORD');
     this.postgresdb = this.get('POSTGRES_DB');
-    this.postgresSynchronize = this.get('POSTGRES_SYNCHRONIZE') === 'true';
-    this.postgresLogging = this.get('POSTGRES_LOGGING') === 'true';
+    this.postgresSynchronize =
+      this.get<string>('POSTGRES_SYNCHRONIZE') === 'true';
+    this.postgresLogging = this.get<string>('POSTGRES_LOGGING') === 'true';
     this.bcryptSalt = Number(this.get('BCRYPT_SALT'));
     this.jwtSecret = this.get('JWT_SECRET');
     this.jwtExpiresIn = this.get('JWT_EXPIRES_IN');
