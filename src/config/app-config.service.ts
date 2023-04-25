@@ -39,13 +39,14 @@ export class AppConfigService {
     this.jwtRefreshExpiresIn = this.get('JWT_REFRESH_EXPIRES_IN');
     this.backendName = this.get('BACKEND_NAME');
     this.telegramToken = this.get('TELEGRAM_TOKEN');
+    console.log(this.postgresExternalHost);
   }
 
-  public get<T = string>(name: string): T {
+  public get<T extends string = string>(name: T): T {
     return this.configService.getOrThrow<T>(name);
   }
 
-  public getOptional<T = string>(name: string): T | undefined {
+  public getOptional<T extends string = string>(name: T): T | undefined {
     return this.configService.get<T>(name);
   }
 }
