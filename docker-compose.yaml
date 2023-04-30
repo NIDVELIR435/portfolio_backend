@@ -3,7 +3,8 @@ version: '3.5'
 services:
   backend:
     build:
-      dockerfile:  Dockerfile
+      dockerfile: Dockerfile
+      target: debug
       context: .
     ports:
       - "3000:3000"
@@ -12,7 +13,7 @@ services:
     depends_on:
       - db
 #    rewrite dockerfile build CMD to start with watch mode
-    command: node dist/main.js
+    command: node dist/main
     env_file:
       - .env
     volumes:

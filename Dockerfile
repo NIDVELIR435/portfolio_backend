@@ -1,22 +1,20 @@
-FROM node:19-alpine
-
-# Create app directory
+#main build
+FROM node:19-alpine AS build
 WORKDIR /app
-
-#copy packages and env
-COPY package.json yarn.lock .env ./
-
-#install yarn
-RUN npm install yarn -G
-
-#install node_modules
-RUN yarn
-
-#build app sourse
 COPY . .
+RUN npx yarn install
+RUN npx yarn build
 
-#create build
-RUN yarn build
+FROM build AS debug
+CMD ["npx", "yarn", "start"]
 
-# start the server using the production build
-CMD ["/bin/sh", "-c", "yarn start:prod"]
+FROM build AS production_build
+RUN npx yarn install --production
+
+FROM node:19-alpine AS production
+WORKDIR /app
+#copies only required files/folders
+COPY --from=production_build /app/dist /app/dist
+COPY --from=production_build /app/node_modules /app/node_modules
+COPY --from=production_build /app/.env /app/package.json /app/yarn.lock /app/
+CMD ["node", "dist/main"]

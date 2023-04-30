@@ -40,7 +40,6 @@ export class AppConfigService {
     this.jwtRefreshExpiresIn = this.get('JWT_REFRESH_EXPIRES_IN');
     this.backendName = this.get('BACKEND_NAME');
     this.telegramToken = this.get('TELEGRAM_TOKEN');
-    console.log(this.postgresExternalHost);
   }
 
   public get<T extends string = string>(name: T): T {

@@ -19,14 +19,6 @@ import { TypeormCustomLogger } from './common/logger/typeorm-logger';
       imports: [AppConfigModule],
       inject: [AppConfigService],
       useFactory: async (appConfigService: AppConfigService) => {
-        console.log({
-          place: 'in module',
-          host: appConfigService.postgresContainerName,
-          port: appConfigService.postgresPort,
-          username: appConfigService.postgresUser,
-          password: appConfigService.postgresPassword,
-          database: appConfigService.postgresdb,
-        });
         return {
           type: 'postgres',
           retryAttempts: 3,

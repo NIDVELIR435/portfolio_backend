@@ -35,7 +35,7 @@ jobs:
           docker login -u AWS -p $DOCKER_PASSWORD https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
       - name: Build docker image
-        run: docker build -t portfolio_backend .
+        run: docker build --target production -t portfolio_backend .
 
       - name: Push Docker image to ECR
         run: |

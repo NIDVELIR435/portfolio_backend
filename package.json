@@ -11,7 +11,7 @@
     "migration:generate": "tput setaf 2; echo \"Write name of the entity below\"; tput sgr0; read ENITITY_NAME; yarn run typeorm -- -d ./src/db/data-source.ts migration:generate ./src/db/migrations/$ENITITY_NAME",
     "migration:create": "tput setaf 2; echo \"Write name of the migration below\"; tput sgr0; read MIGRATION_NAME; yarn run typeorm -- migration:create ./src/db/migrations/$MIGRATION_NAME",
     "migration:revert": "yarn run typeorm -- -d ./src/db/data-source.ts migration:revert",
-    "build": "nest build",
+    "build": "rimraf dist; nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start --watch",
     "start:debug": "nest start --debug --watch",
