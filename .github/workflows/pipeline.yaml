@@ -12,19 +12,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install main dependencies
-        run: |
-          sudo apt-get update
-          sudo npm install -g yarn
-
-      - name: Build application
-        run: |
-          yarn
-          yarn run build
-
-      - name: Execute tests
-        run: |
-          yarn run test
+      - name: Build docker image
+        run: docker build --target production -t portfolio_backend .
 
       - name: Login to ECR
         run: |
@@ -33,9 +22,6 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DOCKER_PASSWORD=$(aws ecr get-login-password)
           docker login -u AWS -p $DOCKER_PASSWORD https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
-
-      - name: Build docker image
-        run: docker build --target production -t portfolio_backend .
 
       - name: Push Docker image to ECR
         run: |

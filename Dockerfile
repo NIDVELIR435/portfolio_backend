@@ -3,6 +3,7 @@ FROM node:19-alpine AS build
 WORKDIR /app
 COPY . .
 RUN npx yarn install
+RUN npx yarn test
 RUN npx yarn build
 
 FROM build AS debug
