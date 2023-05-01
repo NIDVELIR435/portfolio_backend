@@ -15,15 +15,25 @@ jobs:
       - name: Build docker image
         run: docker build --target production -t portfolio_backend .
 
-      - name: Login to ECR
+      - name: Set AWS configuration
         run: |
           aws configure set default.region ${{ secrets.AWS_REGION }}
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Login to AWS ECR
+        run: |
           DOCKER_PASSWORD=$(aws ecr get-login-password)
           docker login -u AWS -p $DOCKER_PASSWORD https://${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-      - name: Push Docker image to ECR
+      - name: Push Docker image to AWS ECR
         run: |
           docker tag portfolio_backend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
           DOCKER_CLIENT_TIMEOUT=120s docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
+
+      - name: Deploy AWS ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          cluster: portfolio-dev
+          service: backend-dev
+          wait-for-service-stability: true
