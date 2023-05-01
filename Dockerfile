@@ -1,21 +1,33 @@
+FROM node:19-alpine AS alpine
+
 #main build
-FROM node:19-alpine AS build
+FROM alpine AS build
 WORKDIR /app
 COPY . .
-RUN npx yarn install
+RUN npx yarn install --frozen-lockfile
 RUN npx yarn build
 
+
+#image for start locally and debug
 FROM build AS debug
+WORKDIR /app
 CMD ["npx", "yarn", "start"]
 
-FROM build AS production_build
-RUN npx yarn test
-RUN npx yarn install --production
 
-FROM node:19-alpine AS production
+#prepare build for production
+FROM build AS production_build
+WORKDIR /app
+RUN npx yarn test
+#will removes packages declared in package "devDependency" from "build" image
+RUN npx yarn install --production --frozen-lockfile
+
+
+#production image, which included only peer dependencies
+FROM alpine AS production
+MAINTAINER Mudryi Yarosalv
 WORKDIR /app
 #copies only required files/folders
 COPY --from=production_build /app/dist /app/dist
 COPY --from=production_build /app/node_modules /app/node_modules
-COPY --from=production_build /app/.env /app/package.json /app/yarn.lock /app/
+COPY --from=production_build /app/.env /app/
 CMD ["node", "dist/main"]

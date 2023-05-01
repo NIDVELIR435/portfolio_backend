@@ -12,8 +12,6 @@ services:
       - "9229:9229"
     depends_on:
       - db
-#    rewrite dockerfile build CMD to start with watch mode
-    command: node dist/main
     env_file:
       - .env
     volumes:
