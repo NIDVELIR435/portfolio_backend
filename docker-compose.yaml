@@ -2,18 +2,18 @@ version: '3.5'
 
 services:
   backend:
+    env_file:
+      - .env
     build:
       dockerfile: Dockerfile
       target: debug
       context: .
     ports:
-      - "3000:3000"
+      - ${APP_PORT}:${APP_PORT}
 #     debug port
       - "9229:9229"
     depends_on:
       - db
-    env_file:
-      - .env
     volumes:
 #      check host changes
       - ./src:/app/src

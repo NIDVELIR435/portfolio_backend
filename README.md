@@ -1,14 +1,13 @@
 ## Installation
 ```bash
-# install all dependencies in your host  
+# install all dependencies in your host(need only to show dependency your IDE)
 $ yarn;
 ```
 
 ## Running the app
 ```bash
-# rename create env or rename env.example to .env
-$ mv .env.example .env
-# will configure and start container in watch mode 
+# will configure and start container in watch mode
+# (all changes from host will be change application in docker container)
 $ yarn docker:start;
 ```
 
