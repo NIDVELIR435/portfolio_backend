@@ -8,7 +8,6 @@ import { refreshTokenCookieName } from './auth/constants/refresh_token';
 import { StrategyName } from './auth/constants/strategyName';
 import * as cookieParser from 'cookie-parser';
 
-console.log(process.env);
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
