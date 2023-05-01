@@ -33,8 +33,16 @@ jobs:
 
       - name: Deploy AWS ECS task definition
         run: |
-          aws ecs update-service --cluster portfolio-dev --service backend-dev --force-new-deployment --task-definition backend
+          aws ecs update-service \
+          --cluster portfolio-dev \
+          --service backend-dev \
+          --force-new-deployment \
+          --task-definition backend \
+          --query 'service.deployments[0].{RolloutState:rolloutState}' \
+          --output text
 
       - name: Waits while AWS ECS service became stable
         run: |
-          aws ecs wait services-stable --cluster portfolio-dev --service backend-dev
+          aws ecs wait services-stable \
+          --cluster portfolio-dev \
+          --service backend-dev
