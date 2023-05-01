@@ -32,9 +32,9 @@ jobs:
           DOCKER_CLIENT_TIMEOUT=120s docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfolio_backend:latest
 
       - name: Deploy AWS ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        with:
-          task-definition: arn:aws:ecs:${{ secrets.AWS_REGION }}:015804471493:task-definition/backend:latest
-          cluster: portfolio-dev
-          service: backend-dev
-          wait-for-service-stability: true
+        run: |
+          aws ecs update-service --cluster portfolio-dev --service backend-dev --force-new-deployment --task-definition backend
+
+      - name: Waits while AWS ECS service became stable
+        run: |
+          aws ecs wait services-stable --cluster portfolio-dev --service backend-dev
