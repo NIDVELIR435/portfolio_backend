@@ -19,8 +19,9 @@ jobs:
           username: ${{ secrets.BASTION_USERNAME }}
           key: ${{ secrets.AWS_PIPELINE_PRIVATE_KEY }}
           port: 22
-          local_port: 5432
-          remote_port: ${{ secrets.RDS_ENDPOINT}}:5432  # <prefix>.eu-west-2.rds.amazonaws.co
+          proxy_port: 5432
+          proxy_host: ${{ secrets.RDS_ENDPOINT}}:5432  # <prefix>.eu-west-2.rds.amazonaws.com
+
       - name: Check and Execute migrations
         run: |
           POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} \
