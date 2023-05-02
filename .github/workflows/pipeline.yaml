@@ -15,6 +15,23 @@ jobs:
       - name: Build docker image
         run: docker build --target production -t portfolio_backend .
 
+      - name: Set up SSH tunnel
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com
+          username: ${{ secrets.BASTION_USERNAME }}
+          key: ${{ secrets.AWS_PIPELINE_PRIVATE_KEY }}
+          port: 22
+          local_port: 5432
+          remote_port: ${{ secrets.RDS_ENDPOINT}}:5432  # <prefix>.eu-west-2.rds.amazonaws.com
+
+      - name: Check and Execute migrations
+        run: |
+          POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} \
+          POSTGRES_DB=${{ secrets.RDS_DB }} \
+          POSTGRES_PORT=5432 \
+          npx yarn migration:run
+
       - name: Set AWS configuration
         run: |
           aws configure set default.region ${{ secrets.AWS_REGION }}
