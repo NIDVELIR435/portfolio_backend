@@ -13,7 +13,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Builds docker image
-        run: docker build --target production -t portfolio_backend .
+        run: |
+          docker -v \
+          docker build --target production -t portfolio_backend .
 
       #  todo check
       - name: Builds docker image with ssh connections for migration
@@ -23,7 +25,7 @@ jobs:
           --env POSTGRES_URL=${{ secrets.RDS_ENDPOINT }} \
           --env POSTGRES_USER=${{ secrets.BASTION_USERNAME }} \
           --env POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} \
-          --target run_command_via_ssh_tunnel -t run_command_via_ssh_tunnel.
+          --target run_migrations -t run_migrations.
 
       #  todo check
       - name: Run migration
@@ -31,7 +33,7 @@ jobs:
           docker run \
           --env SSH_PRIVATE_KEY=${{ secrets.AWS_PIPELINE_PRIVATE_KEY }} \
           --env COMMAND="yarn migration:run" \
-          run_command_via_ssh_tunnel
+          run_migrations
 
 
       - name: Set AWS configuration

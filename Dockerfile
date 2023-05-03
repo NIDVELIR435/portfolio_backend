@@ -17,7 +17,7 @@ WORKDIR /app
 CMD ["npx", "yarn", "start"]
 
 
-FROM build AS run_command_via_ssh_tunnel
+FROM build AS run_migrations
 WORKDIR /app
 
 ENV BASTION_URL=""
@@ -66,4 +66,5 @@ COPY --from=production_build /app/dist /app/dist
 COPY --from=production_build /app/node_modules /app/node_modules
 COPY --from=production_build /app/.env /app/
 
+USER node
 CMD ["node", "dist/main"]
