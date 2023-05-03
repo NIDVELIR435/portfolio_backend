@@ -20,7 +20,7 @@ jobs:
       #  todo check
       - name: Builds docker image with ssh connections for migration
         run: |
-          docker build --target run_migrations . --tag run_migrations.
+          docker build --target run_migrations . --tag run_migrations
 
       #  todo check
       - name: Run migration
