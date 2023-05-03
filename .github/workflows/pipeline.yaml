@@ -15,7 +15,7 @@ jobs:
       - name: Builds docker image
         run: |
           docker -v \
-          docker build --target production -t portfolio_backend .
+          && docker build --target production -t portfolio_backend .
 
       #  todo check
       - name: Builds docker image with ssh connections for migration
