@@ -12,21 +12,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH tunnel
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com
-          username: ${{ secrets.BASTION_USERNAME }}
-          key: ${{ secrets.AWS_PIPELINE_PRIVATE_KEY }}
-          port: 22
-          local_port: 5432
-          remote_port: ${{ secrets.RDS_ENDPOINT}}:5432  # <prefix>.eu-west-2.rds.amazonaws.com
-
-      - name: Check and Execute migrations
-        run: POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} POSTGRES_DB=${{ secrets.RDS_DB }} POSTGRES_PORT=5432 yarn migration:run
-
-      - name: Build docker image
+      - name: Builds docker image
         run: docker build --target production -t portfolio_backend .
+
+      #  todo check
+      - name: Builds docker image with ssh connections for migration
+        run: |
+          docker build \
+          --env BASTION_URL=${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com \
+          --env POSTGRES_URL=${{ secrets.RDS_ENDPOINT }} \
+          --env POSTGRES_USER=${{ secrets.BASTION_USERNAME }} \
+          --env POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} \
+          --target run_command_via_ssh_tunnel -t run_command_via_ssh_tunnel.
+
+      #  todo check
+      - name: Run migration
+        run: |
+          docker run \
+          --env SSH_PRIVATE_KEY=${{ secrets.AWS_PIPELINE_PRIVATE_KEY }} \
+          --env COMMAND="yarn migration:run" \
+          run_command_via_ssh_tunnel
+
 
       - name: Set AWS configuration
         run: |
