@@ -21,16 +21,17 @@ jobs:
       - name: Builds docker image with ssh connections for migration
         run: |
           docker build \
-          --env BASTION_URL=${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com \
-          --env POSTGRES_URL=${{ secrets.RDS_ENDPOINT }} \
-          --env POSTGRES_USER=${{ secrets.BASTION_USERNAME }} \
-          --env POSTGRES_PASSWORD=${{ secrets.RDS_PASSWORD }} \
           --target run_migrations -t run_migrations.
 
       #  todo check
       - name: Run migration
         run: |
           docker run \
+          --env BASTION_URL=${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com \
+          --env POSTGRES_URL=${{ secrets.RDS_ENDPOINT }} \
+          --env POSTGRES_DB=${{ secrets.RDS_DB }} \
+          --env POSTGRES_USER=${{ secrets.BASTION_USERNAME }} \
+          --env POSTGRES_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
           --env SSH_PRIVATE_KEY=${{ secrets.AWS_PIPELINE_PRIVATE_KEY }} \
           --env COMMAND="yarn migration:run" \
           run_migrations
