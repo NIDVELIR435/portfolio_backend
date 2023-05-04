@@ -32,7 +32,7 @@ jobs:
           --env POSTGRES_USER=${{ secrets.BASTION_USERNAME }} \
           --env POSTGRES_PASSWORD='${{ secrets.RDS_PASSWORD }}' \
           --env SSH_PRIVATE_KEY="${{ secrets.AWS_PIPELINE_PRIVATE_KEY }}" \
-          --env COMMAND="yarn migration:run" \
+          --env COMMAND="npx yarn migration:run" \
           run_migrations
 
 
