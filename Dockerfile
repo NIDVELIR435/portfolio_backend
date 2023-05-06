@@ -22,7 +22,7 @@ WORKDIR /app
 #should be reassigned during docker run command
 ENV BASTION_URL=""
 ENV POSTGRES_URL=""
-ENV POSTGRES_DB=""
+ENV POSTGRES_DB=postgres
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV SSH_PRIVATE_KEY=""
