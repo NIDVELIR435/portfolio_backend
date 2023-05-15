@@ -17,12 +17,10 @@ jobs:
           docker -v \
           && docker build --target production -t portfolio_backend .
 
-      #  todo check
       - name: Builds docker image with ssh connections for migration
         run: |
           docker build --target run_migrations . --tag run_migrations
 
-      #  todo check
       - name: Run migration
         run: |
           docker run \
@@ -55,8 +53,8 @@ jobs:
       - name: Deploy AWS ECS task definition
         run: |
           aws ecs update-service \
-          --cluster portfolio-dev \
-          --service backend-dev \
+          --cluster ${{ vars.CLUSTER_NAME }} \
+          --service ${{ vars.CLUSTER_SERVICE_NAME }} \
           --force-new-deployment \
           --task-definition backend \
           --query 'service.deployments[0].{RolloutState:rolloutState}' \
