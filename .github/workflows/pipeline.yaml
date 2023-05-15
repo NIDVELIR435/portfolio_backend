@@ -27,10 +27,10 @@ jobs:
         run: |
           docker run \
           --env BASTION_URL=${{ secrets.BASTION_IP }}.${{ secrets.AWS_REGION }}.compute.amazonaws.com \
-          --env POSTGRES_URL=${{ env.POSTGRES_URL }} \
-          --env POSTGRES_DB=${{ env.POSTGRES_DB }} \
-          --env POSTGRES_USER=${{ env.POSTGRES_USER }} \
-          --env POSTGRES_PASSWORD='${{ env.POSTGRES_PASSWORD }}' \
+          --env POSTGRES_URL=${{ vars.POSTGRES_URL }} \
+          --env POSTGRES_DB=${{ vars.POSTGRES_DB }} \
+          --env POSTGRES_USER=${{ vars.POSTGRES_USER }} \
+          --env POSTGRES_PASSWORD='${{ vars.POSTGRES_PASSWORD }}' \
           --env SSH_PRIVATE_KEY="${{ secrets.AWS_PIPELINE_PRIVATE_KEY }}" \
           --env COMMAND="npx yarn migration:run" \
           run_migrations
