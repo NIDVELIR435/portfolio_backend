@@ -4,7 +4,6 @@ import { Comment, Portfolio } from './';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 import { UiTheme } from './enums/ui-theme.enum';
-import { UserAuth } from './user-auth.entity';
 
 @Entity('user')
 export class User extends IntTimestampEntity {
@@ -64,8 +63,4 @@ export class User extends IntTimestampEntity {
   @ApiProperty({ type: Comment, isArray: true })
   @OneToMany(() => Comment, ({ commenter }) => commenter)
   comments: Comment[];
-
-  @ApiProperty({ type: UserAuth, isArray: true })
-  @OneToMany(() => UserAuth, ({ user }) => user)
-  userAuths: UserAuth[];
 }
