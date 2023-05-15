@@ -12,6 +12,7 @@ import * as Entities from './db/entities';
 import * as Migrations from './db/migrations';
 import { LoggerModule } from './common/logger/logger.module';
 import { TypeormCustomLogger } from './common/logger/typeorm-logger';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { TypeormCustomLogger } from './common/logger/typeorm-logger';
     PortfolioModule,
     ImageModule,
     LoggerModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

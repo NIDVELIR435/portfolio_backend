@@ -21,6 +21,9 @@ export class AppConfigService {
   public readonly backendName: string;
   public readonly telegramToken: string;
 
+  public readonly redisHost: string;
+  public readonly redisPort: number;
+
   constructor(private configService: ConfigService) {
     this.appPort = Number(this.get('APP_PORT'));
     this.nodeEnv = this.get('NODE_ENV');
@@ -40,6 +43,9 @@ export class AppConfigService {
     this.jwtRefreshExpiresIn = this.get('JWT_REFRESH_EXPIRES_IN');
     this.backendName = this.get('BACKEND_NAME');
     this.telegramToken = this.get('TELEGRAM_TOKEN');
+
+    this.redisHost = this.get('REDIS_HOST');
+    this.redisPort = Number(this.get('REDIS_PORT'));
   }
 
   public get<T extends string = string>(name: T): T {

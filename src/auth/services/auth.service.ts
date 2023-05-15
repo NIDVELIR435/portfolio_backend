@@ -12,16 +12,16 @@ import { JwtService } from '@nestjs/jwt';
 import { PureUserDto } from '../../user/dtos/pure-user.dto';
 import { isNil } from 'lodash';
 import { AuthTokenDto } from '../dto/AuthTokens.sto';
-import { UserAuthService } from '../../user/services/user-auth.service';
+import { RedisService } from '../../redis/services/redis.service';
 
 @Injectable()
 export class AuthService {
   private readonly bcryptSalt: number;
   constructor(
     private readonly userService: UserService,
-    private readonly userAuthService: UserAuthService,
     private readonly appConfigService: AppConfigService,
     private jwtService: JwtService,
+    private redisService: RedisService,
   ) {
     this.bcryptSalt = this.appConfigService.bcryptSalt;
   }
@@ -44,20 +44,14 @@ export class AuthService {
   public async login(user: Partial<User>): Promise<AuthTokenDto> {
     const payload = { email: user.email, sub: user.id };
 
-    const accessToken = await this.jwtService.signAsync(payload, {
-      secret: this.appConfigService.jwtSecret,
-      expiresIn: this.appConfigService.jwtExpiresIn,
-    });
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      secret: this.appConfigService.jwtRefreshSecret,
-      expiresIn: this.appConfigService.jwtRefreshExpiresIn,
-    });
-
-    await this.userAuthService.setCurrentRefreshToken({
-      refreshToken,
-      userId: payload.sub,
-      salt: this.bcryptSalt,
-    });
+    const [accessToken, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload),
+      this.jwtService.signAsync(payload, {
+        secret: this.appConfigService.jwtRefreshSecret,
+        expiresIn: this.appConfigService.jwtRefreshExpiresIn,
+      }),
+    ]);
+    await this.redisService.setRefreshToken(user.id, refreshToken);
 
     return { accessToken, refreshToken };
   }
@@ -77,10 +71,11 @@ export class AuthService {
     if (isNil(decoded))
       throw new BadRequestException('Cannot decode refresh token');
 
-    const userAuth = await this.userAuthService.findOneByUserId(decoded.sub);
-    if (isNil(userAuth)) throw new UnauthorizedException();
+    const refreshToken = await this.redisService.getRefreshToken(user.id);
 
-    const isRefreshTokenMatching = await compare(token, userAuth.refreshToken);
+    if (isNil(refreshToken)) throw new UnauthorizedException();
+
+    const isRefreshTokenMatching = token === refreshToken;
 
     if (!isRefreshTokenMatching) {
       throw new UnauthorizedException('Invalid token');
@@ -92,7 +87,7 @@ export class AuthService {
     return this.login(user);
   }
 
-  public removeRefreshToken(email: string): Promise<boolean> {
-    return this.userAuthService.removeRefreshToken(email);
+  public logout(id: number): Promise<boolean> {
+    return this.redisService.clearUserToken(id).then(() => true);
   }
 }

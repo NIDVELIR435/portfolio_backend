@@ -51,10 +51,6 @@ export class UserService {
     });
   }
 
-  signIn({ email }: SignInDto) {
-    return this.userRepository.findOne({ where: { email } });
-  }
-
   public async findOneByEmail(email: string): Promise<PureUserDto | null> {
     return await this.userRepository.findOne({ where: { email } });
   }

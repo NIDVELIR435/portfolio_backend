@@ -92,14 +92,14 @@ export class AuthController {
       summary: 'sign out',
     },
     apiResponses: {
-      [StatusCodes.CREATED]: {
+      [StatusCodes.OK]: {
         type: String,
       },
     },
   })
-  @HttpCode(200)
+  @HttpCode(StatusCodes.OK)
   async logOut(@Req() req: Request & { user: User }, @Res() res: Response) {
-    await this.authService.removeRefreshToken(req.user.email);
+    await this.authService.logout(req.user.id);
     res.headers.set('Authorization', null);
   }
 }
