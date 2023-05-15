@@ -12,8 +12,15 @@ export class RedisService {
   public async setRefreshToken(
     userId: number,
     refreshToken: string,
+    expiredAt: number,
   ): Promise<'OK'> {
-    return this.redis.set(this.assembleUserKey(userId), refreshToken);
+    return this.redis.set(
+      this.assembleUserKey(userId),
+      refreshToken,
+      // unix time (seconds)
+      'EXAT',
+      expiredAt,
+    );
   }
 
   public async clearUserToken(userId: number): Promise<number> {

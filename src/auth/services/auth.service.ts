@@ -51,7 +51,11 @@ export class AuthService {
         expiresIn: this.appConfigService.jwtRefreshExpiresIn,
       }),
     ]);
-    await this.redisService.setRefreshToken(user.id, refreshToken);
+    await this.redisService.setRefreshToken(
+      user.id,
+      refreshToken,
+      this.jwtService.decode(refreshToken)['exp'],
+    );
 
     return { accessToken, refreshToken };
   }
