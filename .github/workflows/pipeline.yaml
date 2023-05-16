@@ -64,5 +64,5 @@ jobs:
       - name: Waits while AWS ECS service became stable
         run: |
           aws ecs wait services-stable \
-          --cluster portfolio-dev \
-          --service backend-dev
+          --cluster ${{ vars.CLUSTER_NAME }} \
+          --service ${{ vars.CLUSTER_SERVICE_NAME }}
